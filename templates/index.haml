@@ -1,0 +1,28 @@
+!!! 5
+%html
+  %head
+    %meta{charset: "utf-8"}
+    %title Play Awalé
+    %link{rel:"stylesheet", href:"3rdparty/bootstrap.min.css"}
+    %link{rel:"stylesheet", href:"3rdparty/bootstrap-theme.min.css"}
+    %link{rel:"stylesheet", href:"style.min.css"}
+  %body
+    .container
+      .row
+        .col-xs-12
+          %h1 Play Awalé
+      .row
+        #app
+          %img{src:"img/loading.gif", alt:"Loading..."}
+      .row
+        .col-xs-12
+          %a.btn.btn-primary.reset-username{href:"#"}
+            Forget my username
+    %script{type:"text/javascript", src:"3rdparty/jquery.min.js"}
+    %script{type:"text/javascript", src:"3rdparty/react.min.js"}
+    %script{type:"text/javascript", src:"3rdparty/react-dom.min.js"}
+    %script{type:"text/javascript", src:"3rdparty/autobahn.min.js"}
+    %script{type:"text/javascript", src:"3rdparty/bootstrap.min.js"}
+    %script{type:"text/javascript", src:"3rdparty/react-bootstrap.min.js"}
+    %script{type:"text/javascript", src:"3rdparty/js.cookie.js"}
+    %script{type:"text/javascript", src:"app.min.js"}
