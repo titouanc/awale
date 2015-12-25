@@ -1,55 +1,9 @@
 const Tooltip = ReactBootstrap.Tooltip,
       OverlayTrigger = ReactBootstrap.OverlayTrigger,
       ProgressBar = ReactBootstrap.ProgressBar,
-      Badge = ReactBootstrap.Badge;
-
-
-const nothing = function(){};
-const onError = function(err){
-    console.log(err);
-    alert(err.args[0]);
-};
-
-const Cell = React.createClass({
-    tooltip: <Tooltip>Click to play this cell</Tooltip>,
-    onClick: function(){
-        if (this.props.mine){
-            this.props.session.call(this.props.gKey + '.play')
-                              .then(nothing, onError);
-        }
-    },
-    getInitialState: function(){return {played: false, taken: false};},
-    render: function(){
-        var klass = "col-xs-2 awale-cell " + (this.props.mine ? "mine" : "adversary");
-        if (this.state.played){
-            klass += " played";
-        }
-        if (this.state.taken){
-            klass += " taken"
-        }
-        return <OverlayTrigger placement="bottom" overlay={this.tooltip}>
-            <div className={klass} onClick={this.onClick}>
-                {this.props.value}
-            </div>
-        </OverlayTrigger>;
-    },
-    onPlay: function(res){
-        this.setState({played: true});
-        setTimeout(
-            function(){this.setState({played: false});}.bind(this), 
-            1000);
-    },
-    onTake: function(res){
-        this.setState({taken: true});
-        setTimeout(
-            function(){this.setState({taken: false});}.bind(this), 
-            1000);
-    },
-    componentDidMount: function(){
-        this.props.session.subscribe(this.props.gKey + '.play', this.onPlay);
-        this.props.session.subscribe(this.props.gKey + '.take', this.onTake);
-    }
-});
+      Badge = ReactBootstrap.Badge,
+      C = require('./common'),
+      Cell = require('./cell');
 
 const Awale = React.createClass({
     getInitialState: function(){
@@ -145,12 +99,12 @@ const Awale = React.createClass({
             this.onUpdate(newState);
             this.props.session.call(this.state.key+'.ready', [this.props.username])
                               .then(function(){console.log("I am now ready");},
-                                    onError);
-        }.bind(this), onError);
+                                    C.onError);
+        }.bind(this), C.onError);
     },
     componentDidMount: function(){
         var args = [this.props.username];
-        this.props.session.call('join_game', args).then(this.onKey, onError);
+        this.props.session.call('join_game', args).then(this.onKey, C.onError);
     }
 });
 

@@ -16,6 +16,7 @@ class Game:
             'ready': False,
             'captures': 0,
         } for i in range(2)]
+        self.playing, self.finished = False, False
 
     def add_player(self, username):
         player = self.players[0] if self.empty else self.players[1]
@@ -44,6 +45,8 @@ class Game:
             'grid': self.grid,
             'hand': self.hand,
             'players': self.players,
+            'playing': self.playing,
+            'finished': self.finished,
         }
 
     def ready(self, username):
@@ -58,19 +61,31 @@ class Game:
     def publish(self):
         self.app.publish('game.'+self.key, self.state())
 
-    def play(self, i):
-        if i // 6 != self.hand:
-            raise Exception("Not your turn")
+    def publish_cell(self, cell_idx, suffix=''):
+        self.app.publish('game.{}.{}{}'.format(self.key, cell_idx, suffix),
+                         self.grid[cell_idx])
 
-        # Take all and distribute in consecutive cells
+    def finish(self):
+        self.finished = True
+        self.publish()
+
+    def play(self, i):
+        if self.playing or i // 6 != self.hand:
+            raise Exception("Not your turn")
         n = self.grid[i]
         if n == 0:
             raise Exception("Cannot play empty cell")
 
-        self.app.publish('game.{}.{}.play'.format(self.key, i))
+        self.playing = True
+
+        # Take all and distribute in consecutive cells
         self.grid[i] = 0
+        self.publish_cell(i, '.play')
         for j in range(n):
-            self.grid[(i+j+1) % 12] += 1
+            k = (i+j+1) % 12
+            self.grid[k] += 1
+            self.publish_cell(k)
+            yield from asyncio.sleep(0.3)
 
         # If the last drop was on the adversary side
         last = (i+n) % 12
@@ -82,13 +97,18 @@ class Game:
                 if m in [2, 3]:
                     self.grid[k] = 0
                     self.players[self.hand]['captures'] += m
-                    self.app.publish('game.{}.{}.take'.format(self.key, k))
+                    self.publish_cell(k, '.take')
                 else:
                     break
 
         # Update turn and publish
         self.hand = (self.hand + 1) % 2
+        self.playing = False
         self.publish()
+
+        score = self.p('score')
+        if sum(score) == 48 or max(score) > 24:
+            self.finish()
 
     def register(self):
         _ = lambda s: ('game.{}.'+s).format(self.key)
@@ -111,12 +131,10 @@ class Component(ApplicationSession):
                 key = str(uuid.uuid4())
                 g = Game(self, key)
                 yield from g.register()
-                print("====== GAME CREATED ======")
                 self.games.append(g)
             else:
                 g = available[0]
             g.add_player(username)
-            print("====== RETURN KEY ======")
             return g.key
         except:
             traceback.print_exc()
