@@ -23,7 +23,7 @@ const Cell = React.createClass({
         return <Tooltip>{text}</Tooltip>;
     },
     klass: function(){
-        var cls = "col-xs-2 awale-cell " + this.side('mine', 'adversary');
+        var cls = "awale-cell " + this.side('mine', 'adversary');
         if (this.state.played){
             cls += " played";
         }
@@ -38,8 +38,10 @@ const Cell = React.createClass({
     render: function(){
         return <OverlayTrigger placement={this.side('bottom', 'top')}
                                overlay={this.tooltip()}>
-            <div className={this.klass()} onClick={this.onClick}>
-                {this.state.value}
+            <div className="col-xs-2">
+                <div className={this.klass()} onClick={this.onClick}>
+                    {this.state.value}
+                </div>
             </div>
         </OverlayTrigger>;
     },

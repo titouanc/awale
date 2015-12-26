@@ -3,22 +3,27 @@ body
 
 .awale-board
   .awale-row
-    margin-bottom: 3em
+    margin-bottom: 1em
+    background: url(/img/wood.jpg)
+    border-radius: 15px
+    padding: 30px
     .awale-cell
-      height: 150px
-      border: solid 1px #333
-      border-radius: 100%
+      border-radius: 5em
       padding: 0px
       text-align: center
-      font-size: 120px
+      font-size: 5em
       &.adversary
-        background-color: #333
+        background-color: rgba(80, 80, 80, 0.5)
         color: #ccc
       &.mine
-        background-color: #ccc
+        cursor: grab
+        background-color: rgba(180, 180, 180, 0.5)
         color: #333
+        &:hover
+          border: solid 3px #8ac9ff
+          margin: -3px
       &.played
-        border-color: #ffdf7f
-        border-width: 5px
+        border: dotted 5px #ffdf7f
+        margin: -5px
       &.taken
         color: #f00

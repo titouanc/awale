@@ -115,9 +115,9 @@ const Awale = React.createClass({
                 <h3>
                     {this.state.players[this.adversary()].username}&nbsp;
                     <small>Adversary</small>&nbsp;
-                    <Badge>
-                        {this.state.players[this.adversary()].captures}
-                    </Badge>
+                    <Label>
+                        score: {this.state.players[this.adversary()].captures}
+                    </Label>
                 </h3>
             </div>
             {this.playerRow(this.adversary())}
@@ -127,9 +127,9 @@ const Awale = React.createClass({
                     <h3>
                         {this.state.players[this.me()].username}&nbsp;
                         <small>You</small>&nbsp;
-                        <Badge>
-                            {this.state.players[this.me()].captures}
-                        </Badge>&nbsp;
+                        <Label>
+                            score: {this.state.players[this.me()].captures}
+                        </Label>&nbsp;
                         {myTurn}
                     </h3>
                 </div>
