@@ -7,18 +7,45 @@
     %link{rel:"stylesheet", href:"3rdparty/bootstrap-theme.min.css"}
     %link{rel:"stylesheet", href:"style.min.css"}
   %body
+    %nav.navbar.navbar-fixed-top.navbar-inverse
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+        #navbar.collapse.navbar-collapse
+          %ul.nav.navbar-nav
+            %li.active
+              %a{href:"#"} Awale
+            %li.reset-username
+              %a{href:"#"} Change username
+            %li.new-game
+              %a{href:"#"} New Game
     .container
-      .row
-        .col-xs-12
-          %h1 Play Awalé
+      %h1 Play Awalé
       .row
         #app
           %img{src:"img/loading.gif", alt:"Loading..."}
-      .btn-group
-        .btn.btn-default.reset-username
-          Change username
-        .btn.btn-default.new-game
-          New game
+    .container
+      .jumbotron
+        :markdown
+          # Rules
+          This is a turn-based games. Two players are opposed, and have 6 holes 
+          filled with 4 seeds at the beginning of the game.
+          ## Playing
+          At each turn, you can take all the seeds from a hole, and they are 
+          dropped in the consecutive holes, one by one, until all the seeds are 
+          dropped.
+          ## Take seeds
+          If the last deposit was in an adversary hole, and there are 2 or 3 
+          seeds in this hole, you take the seeds. Redo this while the previous 
+          hole contains 2 or 3 seeds, even if it reaches your own holes
+          ## Ending the game
+          If one of the players has at least 24 seeds, the game finishes, the 
+          winner is the player who has the more seeds. If you find that the game 
+          might be too long or endless, you can surrender (the winning rules are 
+          the same).
     %script{type:"text/javascript", src:"3rdparty/jquery.min.js"}
     %script{type:"text/javascript", src:"3rdparty/react.min.js"}
     %script{type:"text/javascript", src:"3rdparty/react-dom.min.js"}

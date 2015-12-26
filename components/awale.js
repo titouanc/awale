@@ -2,6 +2,7 @@ const Tooltip = ReactBootstrap.Tooltip,
       OverlayTrigger = ReactBootstrap.OverlayTrigger,
       ProgressBar = ReactBootstrap.ProgressBar,
       Badge = ReactBootstrap.Badge,
+      Label = ReactBootstrap.Label,
       C = require('./common'),
       Cell = require('./cell');
 
@@ -105,7 +106,11 @@ const Awale = React.createClass({
                              label={text + " (" + me + '/' + other + ")"}/>
             </div>;
         }
-        var res = <div className="container awale-board">
+        var myTurn = "";
+        if (this.me() == this.state.hand){
+            myTurn = <Label bsStyle="success">This is your turn !</Label>;
+        }
+        return <div className="container awale-board">
             <div className="row">
                 <h3>
                     {this.state.players[this.adversary()].username}&nbsp;
@@ -118,17 +123,21 @@ const Awale = React.createClass({
             {this.playerRow(this.adversary())}
             {this.playerRow(this.me())}
             <div className="row">
-                <h3>
-                    {this.state.players[this.me()].username}&nbsp;
-                    <small>You</small>&nbsp;
-                    <Badge>
-                        {this.state.players[this.me()].captures}
-                    </Badge>
-                </h3>
-                <SurrenderButton game={this}/>
+                <div className="col-xs-6">
+                    <h3>
+                        {this.state.players[this.me()].username}&nbsp;
+                        <small>You</small>&nbsp;
+                        <Badge>
+                            {this.state.players[this.me()].captures}
+                        </Badge>&nbsp;
+                        {myTurn}
+                    </h3>
+                </div>
+                <div className="col-xs-6">
+                    <SurrenderButton game={this}/>
+                </div>
             </div>
         </div>;
-        return res;
     },
     onUpdate: function(newState){
         this.setState(newState);
