@@ -5,6 +5,31 @@ const Tooltip = ReactBootstrap.Tooltip,
       C = require('./common'),
       Cell = require('./cell');
 
+const SurrenderButton = React.createClass({
+    otherActive: function(){
+        return this.props.game.state.players[this.props.game.adversary()].surrender;
+    },
+    isActive: function(){
+        return this.props.game.state.players[this.props.game.me()].surrender;
+    },
+    onClick: function(){
+        if (this.isActive()){return;}
+        var session = this.props.game.props.session,
+            key = this.props.game.state.key,
+            username = this.props.game.props.username;
+        session.call(key + '.surrender', [username]);
+    },
+    render: function(){
+        var klass = "btn ";
+        if (this.otherActive()){klass += "btn-primary";}
+                          else {klass += "btn-default";}
+        if (this.isActive()){klass += " disabled";}
+        return <div className={klass} onClick={this.onClick}>
+            This is an endless game, I want to surrender
+        </div>;
+    }
+});
+
 const Awale = React.createClass({
     getInitialState: function(){
         return {
@@ -100,6 +125,7 @@ const Awale = React.createClass({
                         {this.state.players[this.me()].captures}
                     </Badge>
                 </h3>
+                <SurrenderButton game={this}/>
             </div>
         </div>;
         return res;

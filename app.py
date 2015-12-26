@@ -15,6 +15,7 @@ class Game:
             'username': None,
             'ready': False,
             'captures': 0,
+            'surrender': False,
         } for i in range(2)]
         self.playing, self.finished = False, False
 
@@ -65,6 +66,17 @@ class Game:
         self.app.publish('game.{}.{}{}'.format(self.key, cell_idx, suffix),
                          self.grid[cell_idx])
 
+    def surrender(self, username):
+        for p in self.players:
+            print(username, p)
+            if p['username'] == username:
+                p['surrender'] = True
+                if tuple(self.p('surrender')) == (True, True):
+                    self.finish()
+                self.publish()
+                return
+        raise Exception("NOT IN THE GAME")
+
     def finish(self):
         self.finished = True
         self.publish()
@@ -77,6 +89,8 @@ class Game:
             raise Exception("Cannot play empty cell")
 
         self.playing = True
+        for u in self.players:
+            u['surrender'] = False
 
         # Take all and distribute in consecutive cells
         self.grid[i] = 0
@@ -114,6 +128,7 @@ class Game:
         _ = lambda s: ('game.{}.'+s).format(self.key)
         yield from self.app.register(self.state, _('state'))
         yield from self.app.register(self.ready, _('ready'))
+        yield from self.app.register(self.surrender, _('surrender'))
         for i in range(12):
             yield from self.app.register(partial(self.play, i), _(str(i)+'.play'))
 
