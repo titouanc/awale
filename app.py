@@ -106,8 +106,8 @@ class Game:
         self.playing = False
         self.publish()
 
-        score = self.p('score')
-        if sum(score) == 48 or max(score) > 24:
+        score = tuple(self.p('captures'))
+        if max(score) >= 24:
             self.finish()
 
     def register(self):
@@ -116,7 +116,6 @@ class Game:
         yield from self.app.register(self.ready, _('ready'))
         for i in range(12):
             yield from self.app.register(partial(self.play, i), _(str(i)+'.play'))
-        print("====== game.{} REGISTERED ======".format(self.key))
 
 
 class Component(ApplicationSession):

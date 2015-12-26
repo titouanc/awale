@@ -51,20 +51,13 @@ const Cell = React.createClass({
     },
     onPlay: function(res){
         this.setState({played: true, value: res});
-        setTimeout(
-            function(){this.setState({played: false});}.bind(this), 
-            this.hilight_timeout);
+        C.setStateLater(this, {played: false}, this.hilight_timeout);
     },
     onTake: function(res){
         this.setState({taken: true, value: res});
-        setTimeout(
-            function(){this.setState({taken: false});}.bind(this), 
-            this.hilight_timeout);
+        C.setStateLater(this, {taken: false}, this.hilight_timeout);
     },
-    onUpdate: function(val){
-        console.log("UPDATE " + this.props.gKey + " -> " + val);
-        this.setState({value: val});
-    },
+    onUpdate: function(val){this.setState({value: val});},
     componentDidMount: function(){
         this.props.session.subscribe(this.props.gKey + '.play', this.onPlay);
         this.props.session.subscribe(this.props.gKey + '.take', this.onTake);

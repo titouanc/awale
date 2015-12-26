@@ -14,10 +14,11 @@
       .row
         #app
           %img{src:"img/loading.gif", alt:"Loading..."}
-      .row
-        .col-xs-12
-          %a.btn.btn-primary.reset-username{href:"#"}
-            Forget my username
+      .btn-group
+        .btn.btn-default.reset-username
+          Change username
+        .btn.btn-default.new-game
+          New game
     %script{type:"text/javascript", src:"3rdparty/jquery.min.js"}
     %script{type:"text/javascript", src:"3rdparty/react.min.js"}
     %script{type:"text/javascript", src:"3rdparty/react-dom.min.js"}

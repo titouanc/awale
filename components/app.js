@@ -13,12 +13,21 @@ const getUsername = function(){
     return res;
 };
 
+const reload = function(){
+    if (confirm("WARNING: You will leave the current game ! Continue ?")){
+        window.location.reload();
+    }
+}
+
 $(document).ready(function(){
     var my_username = getUsername();
 
     $('.reset-username').click(function(ev){
         Cookies.remove(USERNAME_COOKIE);
-        window.location.reload();
+        reload();
+    });
+    $('.new-game').click(function(ev){
+        reload();
     });
 
     var url;

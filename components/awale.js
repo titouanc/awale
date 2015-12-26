@@ -53,13 +53,31 @@ const Awale = React.createClass({
     render: function(){
         if (! this.complete()){
             return <div className="container"> 
-                <ProgressBar active now={33} label="Waiting for another player"/>
+                <ProgressBar active now={33}
+                             label="Waiting for another player"/>
             </div>;
         }
         if (! this.ready()){
             return <div className="container">
-                <h3>Are you ready ?</h3>
-                <ProgressBar bsStyle="info" now={66} label="You are not both ready"/>;
+                <ProgressBar active bsStyle="info" now={66} 
+                             label="You are not both ready"/>
+            </div>;
+        }
+        if (this.state.finished){
+            var style = "danger",
+                text = "You lost !"
+                me = this.state.players[this.me()].captures,
+                other = this.state.players[this.adversary()].captures;
+            if (me > other){
+                style = "success";
+                text = "You won !";
+            } else if (me == other){
+                style = "warning";
+                text = "Drawn match !";
+            }
+            return <div className="container">
+                <ProgressBar bsStyle={style} now={100}
+                             label={text + " (" + me + '/' + other + ")"}/>
             </div>;
         }
         var res = <div className="container awale-board">
