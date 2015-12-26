@@ -139,23 +139,22 @@ class Component(ApplicationSession):
     """
 
     def join_game(self, username):
-        try:
-            available = list(filter(lambda g: not g.complete, self.games))
-            if not available:
-                key = str(uuid.uuid4())
-                g = Game(self, key)
-                yield from g.register()
-                self.games.append(g)
-            else:
-                g = available[0]
-            g.add_player(username)
-            return g.key
-        except:
-            traceback.print_exc()
+        if not self.next_game:
+            key = str(uuid.uuid4())
+            self.next_game = Game(self, key)
+            yield from self.next_game.register()
+        if username not in self.next_game.p('username'):
+            self.next_game.add_player(username)
+        res = self.next_game.key
+        if self.next_game.complete:
+            self.games.append(self.next_game)
+            self.next_game = None
+        return res
 
     @asyncio.coroutine
     def onJoin(self, details):
         self.games = []
+        self.next_game = None
         yield from self.register(self.join_game, 'join_game')
 
 
