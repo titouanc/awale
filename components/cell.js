@@ -1,10 +1,11 @@
 const Tooltip = ReactBootstrap.Tooltip,
       OverlayTrigger = ReactBootstrap.OverlayTrigger,
+      Col = ReactBootstrap.Col,
       C = require('./common');
 
 /*
  * One of the cell where the seeds are put.
- * <Cell mine={true|false} gKey={'game.UUID.CELL_ID'}/>
+ * <Cell mine={true|false} cellKey={'game.UUID.CELL_ID'}/>
  */
 const Cell = React.createClass({
     hilight_timeout: 1500,
@@ -18,8 +19,8 @@ const Cell = React.createClass({
     },
     tooltip: function(){
         var text = this.side(
-            "Click to play this cell",
-            "This is an adversary cell, you cannot do anything");
+            "Click to take the seeds from this hole",
+            "This is an adversary hole, you cannot do anything");
         return <Tooltip>{text}</Tooltip>;
     },
     klass: function(){
@@ -36,18 +37,18 @@ const Cell = React.createClass({
         return {played: false, taken: false, value: this.props.value};
     },
     render: function(){
-        return <OverlayTrigger placement={this.side('bottom', 'top')}
+        return <Col xs={2}>
+            <OverlayTrigger placement={this.side('bottom', 'top')}
                                overlay={this.tooltip()}>
-            <div className="col-xs-2">
                 <div className={this.klass()} onClick={this.onClick}>
                     {this.state.value}
                 </div>
-            </div>
-        </OverlayTrigger>;
+            </OverlayTrigger>
+        </Col>;
     },
     onClick: function(){
         if (this.props.mine){
-            this.props.session.call(this.props.gKey + '.play')
+            this.props.session.call(this.props.cellKey + '.play')
                               .then(C.nothing, C.onError);
         }
     },
@@ -61,9 +62,9 @@ const Cell = React.createClass({
     },
     onUpdate: function(val){this.setState({value: val});},
     componentDidMount: function(){
-        this.props.session.subscribe(this.props.gKey + '.play', this.onPlay);
-        this.props.session.subscribe(this.props.gKey + '.take', this.onTake);
-        this.props.session.subscribe(this.props.gKey, this.onUpdate);
+        this.props.session.subscribe(this.props.cellKey + '.play', this.onPlay);
+        this.props.session.subscribe(this.props.cellKey + '.take', this.onTake);
+        this.props.session.subscribe(this.props.cellKey, this.onUpdate);
     }
 });
 
