@@ -65,12 +65,12 @@ const Board = React.createClass({
     render: function(){
         if (this.props.game.finished){
             return <Grid>
-                <img alt="Finished..." src="/img/end.jpg"/>
+                <center><img alt="Finished..." src="/img/end.jpg"/></center>
             </Grid>;
         }
         if (! this.props.game.ready()){
             return <Grid>
-                <img alt="Waiting..." src="/img/loading.gif"/>
+                <center><img alt="Waiting..." src="/img/loading.gif"/></center>
             </Grid>;
         }
         console.log('Rendering board !');
